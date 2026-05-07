@@ -81,3 +81,31 @@ export PYTHONBREAKPOINT=ipdb.set_trace
 export PATH="$PATH:$HOME/.rvm/bin"
 export PATH="/opt/homebrew/opt/openssl@1.1/bin:$PATH" # fix for installing ruby 3.2.2
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+lfg() {
+  local base_dir="$PWD"
+  local react_dir="$base_dir/apps/react"
+  local rails_dir="$base_dir/apps/rails"
+
+  if [[ ! -d "$react_dir" || ! -d "$rails_dir" ]]; then
+    echo "Run lfg from the project root."
+    echo "Expected directories not found:"
+    echo "  $react_dir"
+    echo "  $rails_dir"
+    return 1
+  fi
+
+  if ! command -v ttab >/dev/null 2>&1; then
+    echo "ttab is not installed or not on PATH."
+    return 1
+  fi
+
+  # Open six new tabs, then run React in the current tab.
+  ttab "cd '$rails_dir' && rails s"
+  ttab "cd '$rails_dir' && rails c"
+  ttab "cd '$rails_dir' && sidekiq"
+  ttab "cd '$rails_dir' && ngrok http 3000"
+  ttab "cd '$rails_dir'"
+  ttab "cd '$base_dir'"
+  cd "$react_dir" && npm run dev
+}
