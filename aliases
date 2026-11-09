@@ -3,3 +3,4 @@ alias rc='rails c' # rails console
 alias rs='rails s' # rails server
 alias logs='tail -f log/development.log' # run logs for dev env
 alias weather='curl wttr.in' # retrieve local weather report in console
+alias sendit='gh workflow run deploy.yml' # trigger GitHub Actions deploy workflow
